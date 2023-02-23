@@ -1,0 +1,61 @@
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  annotations:
+    kompose.cmd: /snap/kompose/19/kompose-linux-amd64 convert
+    kompose.version: 1.21.0 (992df58d8)
+  creationTimestamp: null
+  labels:
+    io.kompose.service: api
+  name: api
+spec:
+  selector:
+    matchLabels:
+      io.kompose.service: api
+  strategy: {}
+  template:
+    metadata:
+      annotations:
+        kompose.cmd: /snap/kompose/19/kompose-linux-amd64 convert
+        kompose.version: 1.21.0 (992df58d8)
+      creationTimestamp: null
+      labels:
+        io.kompose.network/postgres: "true"
+        io.kompose.service: api
+    spec:
+      containers:
+      - env:
+        - name: DB_DATABASE
+          value: YOUR_POSTGRES_DATABASE
+        - name: DB_HOST
+          value: postgres
+        - name: DB_PASSWORD
+          valueFrom: 
+            secretKeyRef:
+              name: secret
+              key: DB_PASSWORD
+        - name: DB_USERNAME
+          valueFrom: 
+            secretKeyRef:
+              name: secret
+              key: DB_USERNAME
+        image: wldev/kubereval.api:1.0
+        imagePullPolicy: Always
+        name: api-container
+        volumeMounts:
+        - mountPath: /var/opt/kubereval/api/data/
+          name: api-claim0
+        ports:
+        - containerPort: 3000
+        resources:
+          limits:
+            memory: "128Mi"
+            cpu: "500m"
+      restartPolicy: Always
+      serviceAccountName: ""
+      volumes:
+        - name: api-claim0
+          hostPath:
+            path: /run/desktop/mnt/host/c/kubereval/api_data
+            type: DirectoryOrCreate
+status: {}
