@@ -52,6 +52,6 @@ spec:
       volumes:
         - name: pgdb-claim0
           hostPath:
-            path: /run/desktop/mnt/host/c/kubereval/pgdb_data
+            path: /kubereval/pgdb_data
             type: DirectoryOrCreate
 status: {}

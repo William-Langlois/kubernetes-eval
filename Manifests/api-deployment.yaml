@@ -42,9 +42,6 @@ spec:
         image: wldev/kubereval.api:1.0
         imagePullPolicy: Always
         name: api-container
-        volumeMounts:
-        - mountPath: /var/opt/kubereval/api/data/
-          name: api-claim0
         ports:
         - containerPort: 3000
         resources:
@@ -53,9 +50,4 @@ spec:
             cpu: "500m"
       restartPolicy: Always
       serviceAccountName: ""
-      volumes:
-        - name: api-claim0
-          hostPath:
-            path: /run/desktop/mnt/host/c/kubereval/api_data
-            type: DirectoryOrCreate
 status: {}
